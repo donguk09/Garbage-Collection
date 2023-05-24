@@ -42,8 +42,36 @@ student = Student("파이썬")
    
 2. 가비지 컬렉션이 제대로 동작되지 않는 경우
 ```python
+class Student:
 
+    def __init__(self, name, stuNum):
+        self.name = name
+        self.stuNum = stuNum
+        print(f"Student 객체 {self.name}, {self.stuNum} 생성")
+
+    def __del__(self):
+        print(f"Student 객체 {self.name}, {self.stuNum} 해제")
+
+
+student1 = Student("강동욱", "201945092")
+student2 = Student("파이썬", "123456789")
+student1.stuNum = student2
+student2.stuNum = student1
+
+student1 = Student("홍길동", "456789123")
+
+# 출력결과
+# Student 객체 강동욱, 201945092 생성
+# Student 객체 파이썬, 123456789 생성
+# Student 객체 홍길동, 456789123 생성
+
+# 설명
+# student1 = Student("강동욱", "201945092")에서 Student 객체가 생성된다.
+# student2 = Student("파이썬", "123456789")에서 Student 객체가 생성된다.
+# student1.stuNum = student2, student2.stuNum = student1 에서 객체들 간에 서로 참조하는 순환 참조 형성
+# student1 = Student("홍길동", "456789123")에서 Student 객체를 student1 변수에 생성 하였으나,
+# name이 "강동욱"인 객체가 이미 순환 참조를 형성하였기 때문에, 가비지 컬렉션이 작동하지 않고 소멸자 또한 실행되지 않았음. 따라서 메모리 누수가 발생한다.
 ```
 
 ***
-참고 : https://wikidocs.net/13969 (점프 투 파이썬 docs), https://chat.openai.com/ (챗GPT)
+참고 : https://wikidocs.net/13969 (점프 투 파이썬 docs)
